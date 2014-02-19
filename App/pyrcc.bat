@@ -1,0 +1,1 @@
+pyrcc4 -o resource_rc.py %1
