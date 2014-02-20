@@ -252,13 +252,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     vmNode.data(newRecord)
                     # update flag
                     changed = True
-                    continue
 
                 # check whether 'resident_on' is changed
                 if oldRecord['resident_on'] != newRecord['resident_on']:
+
                     # remove it from old host and add it to new host
                     self.poolDataIndex['hostIndex'][oldRecord['resident_on']].deleteChild(vmNode)
                     self.poolDataIndex['hostIndex'][newRecord['resident_on']].addChild(vmNode)
+
                     # update data with the new record
                     newRecord['OpaqueRef'] = oldRecord['OpaqueRef']
                     vmNode.data(newRecord)
@@ -304,7 +305,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             elif state == 'Suspended':
                 self.ui.menuSuspendedVM.exec_(QCursor.pos())
 
-    def renderTreeView(self, hosts, vms):
+    def buildTreeView(self, hosts, vms):
         '''render the tree view with hosts' data and vms' data
 
         should be used after a session was made
@@ -312,6 +313,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         rootNode = treeModel.GenericNode(None)
         self.poolDataIndex['hostIndex'] = {}
         self.poolDataIndex['vmIndex'] = {}
+
+        # special host node
+        self.poolDataIndex['hostIndex']['OpaqueRef:NULL'] = rootNode
+
         for h in hosts:
             hostNode = treeModel.HostNode(h, rootNode)
             self.poolDataIndex['hostIndex'][h['OpaqueRef']] = hostNode   # set up host dict
@@ -322,7 +327,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             else:
                 parentRef = v['affinity']
 
-            vmNode = treeModel.VMNode(v, parent=self.poolDataIndex['hostIndex'][parentRef])
+            if self.poolDataIndex['hostIndex'].get(parentRef) is None:
+                # extreme case, no host 'owns' this vm, then put it under the root node
+                vmNode = treeModel.VMNode(v, parent=rootNode)
+            else:
+                vmNode = treeModel.VMNode(v, parent=self.poolDataIndex['hostIndex'][parentRef])
+
             self.poolDataIndex['vmIndex'][v['OpaqueRef']] = vmNode   # set up vm dict
 
             # log file
@@ -374,14 +384,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             'name_label',
             'name_description',
             'uuid',
+            'is_control_domain',
             'power_state',
+            'tags',
             'OpaqueRef',
             'VCPUs_at_startup',
             'memory_target'
         ]
 
         for i in fields:
-            self.ui.tabInformation.findChild(QLineEdit, 'lineEdit_' + i).setText(data[i])
+            obj = data[i]
+            if isinstance(obj, str):
+                self.ui.tabInformation.findChild(QLineEdit, 'lineEdit_' + i).setText(data[i])
+            elif isinstance(obj, bool):
+                self.ui.tabInformation.findChild(QLineEdit, 'lineEdit_' + i).setText(str(obj))
+            elif isinstance(obj, list):
+                self.ui.tabInformation.findChild(QLineEdit, 'lineEdit_' + i).setText('/'.join(obj))
 
     def buildDataGraph(self):
         # self.dataGraph = DataGraph(self, background='#FFFFFF')
@@ -400,7 +418,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.statusBar.showMessage(text, delay)
 
     def updateLog(self, log):
-        self.ui.plainTextLog.appendPlainText(r'{0}\n{1}'.format(time.strftime('%H:%M:%S', time.localtime(time.time())), self.tr(log)))
+        self.ui.plainTextLog.appendPlainText('{0}\n{1}'.format(time.strftime('%H:%M:%S', time.localtime(time.time())), self.tr(log)))
 
     '''
     ui stuff end
@@ -435,10 +453,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.ui.statusBar.showMessage(self.tr('连接成功。正在获取虚拟机信息……'))
 
                 # fill treeview with data
-                self.renderTreeView(self.xenManager.get_hosts(), self.xenManager.get_vms())
+                self.buildTreeView(self.xenManager.get_hosts(), self.xenManager.get_vms())
 
                 # build up QActions list for migrating
                 for hostRef, hostNode in self.poolDataIndex['hostIndex'].items():
+                    if hostNode.data() is None:
+                        continue
                     hostAction = QAction(hostNode.name(), self)
                     self.ui.menuVMMigrate.addAction(hostAction)
                     self.migrateMapper.setMapping(hostAction, hostRef)

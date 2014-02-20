@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Z:\python\Micro-XenServer-Manager\App\ui_login.ui'
 #
-# Created: Tue Feb 18 20:01:19 2014
+# Created: Wed Feb 19 20:58:36 2014
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -47,6 +47,7 @@ class Ui_Form(object):
         self.lineEdit_password.setObjectName(_fromUtf8("lineEdit_password"))
         self.pushButton_login = QtGui.QPushButton(Form)
         self.pushButton_login.setGeometry(QtCore.QRect(10, 130, 151, 31))
+        self.pushButton_login.setLocale(QtCore.QLocale(QtCore.QLocale.Chinese, QtCore.QLocale.China))
         self.pushButton_login.setObjectName(_fromUtf8("pushButton_login"))
 
         self.retranslateUi(Form)
@@ -57,5 +58,5 @@ class Ui_Form(object):
         self.lineEdit_ip.setPlaceholderText(_translate("Form", "IP", None))
         self.lineEdit_username.setPlaceholderText(_translate("Form", "username", None))
         self.lineEdit_password.setPlaceholderText(_translate("Form", "password", None))
-        self.pushButton_login.setText(_translate("Form", "Login", None))
+        self.pushButton_login.setText(_translate("Form", "连接", None))
 
