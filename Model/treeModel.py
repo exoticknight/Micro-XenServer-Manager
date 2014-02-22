@@ -94,6 +94,9 @@ class HostNode(GenericNode):
     def type(self):
         return 'HOST'
 
+    def ip(self):
+        return self._data['address']
+
 
 class PoolTreeModel(QtCore.QAbstractItemModel):
     def __init__(self, root, parent=None):

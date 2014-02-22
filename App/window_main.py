@@ -11,11 +11,10 @@ from PyQt4.QtGui import *
 from ui_main import Ui_MainWindow
 from ui_login import Ui_Form
 
-import numpy as np
-import pyqtgraph as pg
-
+from parse_rrd import *
 from Model import treeModel
-from dataGraph import DataGraph
+from liveDataGraph import LiveDataGraph
+from statisticDataGraph import StatisticDataGraph
 import XenManager.manager
 import task
 
@@ -128,10 +127,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # customize ui
         #self.setWindowFlags(Qt.FramelessWindowHint)
         #self.ui.statusBar.setSizeGripEnabled(True)
-        self.dataGraph = None
+        self.ui.dateTimeEditTo.setDateTime(QDateTime.currentDateTime())
+        self.ui.dateTimeEditFrom.setDateTime(QDateTime.currentDateTime().addSecs(-60))
 
         # initial data graph
-        self.multiDataGraph = None
+        self.liveDataGraph = None
+        self.statisticDataGraph = None
         self.buildDataGraph()
 
         # everything is ok, notify the user
@@ -229,21 +230,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # button event
         self.ui.pushButtonSaveLog.clicked.connect(self.saveLogToFile)
+        self.ui.pushButtonAnalyze.clicked.connect(self.generateStatistic)
 
     def monitoringVMs(self):
         if self.poolDataIndex.get('vmIndex') is None:
             return
 
         changed = False
-        qDebug('-------------------------')
+        # qDebug('-------------------------')
         for OpaqueRef, vmNode in self.poolDataIndex['vmIndex'].items():
             oldRecord = vmNode.data()
             try:
                 newRecord = self.xenManager.xenapi.VM.get_record(OpaqueRef)
-                qDebug('old ' + oldRecord['name_label'] + ' ' + oldRecord['power_state'])
-                qDebug('new ' + oldRecord['name_label'] + ' ' + newRecord['power_state'])
+                # qDebug('old ' + oldRecord['name_label'] + ' ' + oldRecord['power_state'])
+                # qDebug('new ' + oldRecord['name_label'] + ' ' + newRecord['power_state'])
             except Exception, e:
-                qDebug('miss ' + oldRecord['name_label'])
+                # qDebug('miss ' + oldRecord['name_label'])
+                pass
             else:
                 # check whether 'power_state' is changed
                 if oldRecord['power_state'] != newRecord['power_state']:
@@ -258,7 +261,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
                     # remove it from old host and add it to new host
                     self.poolDataIndex['hostIndex'][oldRecord['resident_on']].deleteChild(vmNode)
-                    self.poolDataIndex['hostIndex'][newRecord['resident_on']].addChild(vmNode)
+                    if newRecord['resident_on'] == 'OpaqueRef:NULL':
+                        self.poolDataIndex['hostIndex'][newRecord['affinity']].addChild(vmNode)
+                    else:
+                        self.poolDataIndex['hostIndex'][newRecord['resident_on']].addChild(vmNode)
 
                     # update data with the new record
                     newRecord['OpaqueRef'] = oldRecord['OpaqueRef']
@@ -271,7 +277,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ui.treeView.expandAll()
 
     def monitoringData(self):
-        self.multiDataGraph.refresh(['192.168.1.251', '192.168.1.252'])
+        # TODO replace the tuple with dynamic data
+        self.liveDataGraph.refresh(['192.168.1.251', '192.168.1.252'])
 
     '''
     ui stuff start
@@ -402,11 +409,63 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.ui.tabInformation.findChild(QLineEdit, 'lineEdit_' + i).setText('/'.join(obj))
 
     def buildDataGraph(self):
-        # self.dataGraph = DataGraph(self, background='#FFFFFF')
-        # self.ui.verticalLayout_3.addWidget(self.dataGraph)
+        '''initialize all data graphics
+        this will initialize two main data graphic, including data monitoring and data statistics
+        '''
+        #
+        self.liveDataGraph = LiveDataGraph(self, background='#FFFFFF')
+        self.ui.verticalLayout_6.addWidget(self.liveDataGraph)
 
-        self.multiDataGraph = DataGraph(self, background='#FFFFFF')
-        self.ui.verticalLayout_6.addWidget(self.multiDataGraph)
+        self.statisticDataGraph = StatisticDataGraph(self, background='#FFFFFF')
+        self.ui.verticalLayout_8.addWidget(self.statisticDataGraph)
+
+    def generateStatistic(self):
+        paramFromTime = int(time.mktime(self.ui.dateTimeEditFrom.dateTime().toPyDateTime().timetuple()))
+        paramToTime = int(time.mktime(self.ui.dateTimeEditTo.dateTime().toPyDateTime().timetuple()))
+        if paramFromTime >= paramToTime:
+            return
+
+        # data structure
+        data = [[], []]
+
+        # get parameters
+        paramK = self.ui.doubleSpinBoxK.value()
+        paramT = 5   # T
+        formula = lambda t, c, m, k: t * (c + k * m)
+
+        totalEnergy = 0
+        urlParam = {'start': paramFromTime, 'end': paramToTime}
+        parser = RRDUpdates()
+        for ip in [x.ip() for x in self.poolDataIndex['hostIndex'].values() if x.type() == 'HOST']:
+            totalEnergyPerIp = 0
+            dataPerIp = [[], []]
+
+            # query the data from host
+            parser.refresh(self.xenManager.get_session_ref(), urlParam, server='http://' + ip)
+
+            # parse data
+            for row in range(0, parser.get_nrows()):
+                paramM = (parser.get_host_data('memory_total_kib', row) - parser.get_host_data('memory_free_kib', row)) / 1024   # KB->MB
+                paramC = parser.get_host_data('cpu_avg', row) * 100
+                totalEnergyPerIp = totalEnergyPerIp + formula(paramT, paramC, paramM, paramK)
+
+                dataPerIp[0].append(parser.get_row_time(row))
+                dataPerIp[1].append(totalEnergyPerIp)
+
+            # update the whole data
+            if len(data[0]) == 0:
+                data[0] = dataPerIp[0][:]
+                data[1] = dataPerIp[1][:]
+            else:
+                data[1] = [data[1][index] + x for index, x in enumerate(dataPerIp[1][:len(data[1])])]
+
+        self.statisticDataGraph.renderGraph(x=data[0][:len(data[1])], y=data[1])
+        print data[0]
+        print data[1]
+
+        self.ui.labelTotalEnergy.setText(str('{0}Ec W'.format(data[1][-1])))
+
+        self.updateStatus('分析完成.', 2000)
 
     def updateProgress(self, value):
         '''update the main progress'''
@@ -415,7 +474,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def updateStatus(self, text, delay=0):
         '''update the text of statusBar'''
-        self.ui.statusBar.showMessage(text, delay)
+        self.ui.statusBar.showMessage(self.tr(text), delay)
 
     def updateLog(self, log):
         self.ui.plainTextLog.appendPlainText('{0}\n{1}'.format(time.strftime('%H:%M:%S', time.localtime(time.time())), self.tr(log)))
@@ -428,9 +487,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         r = result.toPyObject()[0]  # !!! notice that result is immutable container
 
         if r['status'] == 'success':
-            self.updateStatus(self.tr('操作成功。'))
+            self.updateStatus('操作成功。')
         elif r['status'] == 'failure':
-            self.updateStatus(self.tr('操作失败。' + str(r['error'])))
+            self.updateStatus('操作失败。' + str(r['error']))
 
         self.operationLock = False
 
@@ -470,7 +529,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.stateMonitorTimer.start(2000)
 
                 # begin to acquire data
-                self.multiDataGraph.bindSession(self.xenManager.get_session_ref())
+                self.liveDataGraph.bindSession(self.xenManager.get_session_ref())
                 self.dataMonitorTimer.start(5000)
 
                 # enable disconnect action
@@ -484,7 +543,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # stop monitoring and clear all data
             self.stateMonitorTimer.stop()
             self.dataMonitorTimer.stop()
-            self.multiDataGraph.unbindSession()
+            self.liveDataGraph.unbindSession()
             self.xenManager.disconnect()
             self.poolMasterInfo = None
             self.poolTreeModel.clear()

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Z:\python\Micro-XenServer-Manager\App\ui_main.ui'
 #
-# Created: Wed Feb 19 20:29:46 2014
+# Created: Sat Feb 22 22:52:10 2014
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -293,13 +293,13 @@ class Ui_MainWindow(object):
         self.pushButtonSaveLog.setObjectName(_fromUtf8("pushButtonSaveLog"))
         self.verticalLayout_2.addWidget(self.pushButtonSaveLog)
         self.tabWidget.addTab(self.tabLog, _fromUtf8(""))
-        self.tabStatistic = QtGui.QWidget()
-        self.tabStatistic.setObjectName(_fromUtf8("tabStatistic"))
-        self.verticalLayout_4 = QtGui.QVBoxLayout(self.tabStatistic)
+        self.tabWatch = QtGui.QWidget()
+        self.tabWatch.setObjectName(_fromUtf8("tabWatch"))
+        self.verticalLayout_4 = QtGui.QVBoxLayout(self.tabWatch)
         self.verticalLayout_4.setSpacing(0)
         self.verticalLayout_4.setMargin(9)
         self.verticalLayout_4.setObjectName(_fromUtf8("verticalLayout_4"))
-        self.label = QtGui.QLabel(self.tabStatistic)
+        self.label = QtGui.QLabel(self.tabWatch)
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(True)
@@ -312,7 +312,7 @@ class Ui_MainWindow(object):
         self.label.setMargin(5)
         self.label.setObjectName(_fromUtf8("label"))
         self.verticalLayout_4.addWidget(self.label)
-        self.scrollArea_2 = QtGui.QScrollArea(self.tabStatistic)
+        self.scrollArea_2 = QtGui.QScrollArea(self.tabWatch)
         self.scrollArea_2.setFrameShape(QtGui.QFrame.StyledPanel)
         self.scrollArea_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scrollArea_2.setObjectName(_fromUtf8("scrollArea_2"))
@@ -327,6 +327,114 @@ class Ui_MainWindow(object):
         self.verticalLayout_6.setObjectName(_fromUtf8("verticalLayout_6"))
         self.scrollArea_2.setWidget(self.scrollAreaWidgetContents_2)
         self.verticalLayout_4.addWidget(self.scrollArea_2)
+        self.tabWidget.addTab(self.tabWatch, _fromUtf8(""))
+        self.tabStatistic = QtGui.QWidget()
+        self.tabStatistic.setObjectName(_fromUtf8("tabStatistic"))
+        self.verticalLayout_7 = QtGui.QVBoxLayout(self.tabStatistic)
+        self.verticalLayout_7.setSpacing(0)
+        self.verticalLayout_7.setObjectName(_fromUtf8("verticalLayout_7"))
+        self.gridLayout = QtGui.QGridLayout()
+        self.gridLayout.setContentsMargins(-1, -1, -1, 5)
+        self.gridLayout.setHorizontalSpacing(7)
+        self.gridLayout.setVerticalSpacing(0)
+        self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
+        self.label_Form = QtGui.QLabel(self.tabStatistic)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_Form.sizePolicy().hasHeightForWidth())
+        self.label_Form.setSizePolicy(sizePolicy)
+        self.label_Form.setObjectName(_fromUtf8("label_Form"))
+        self.gridLayout.addWidget(self.label_Form, 0, 2, 1, 1)
+        self.dateTimeEditFrom = QtGui.QDateTimeEdit(self.tabStatistic)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.dateTimeEditFrom.sizePolicy().hasHeightForWidth())
+        self.dateTimeEditFrom.setSizePolicy(sizePolicy)
+        self.dateTimeEditFrom.setObjectName(_fromUtf8("dateTimeEditFrom"))
+        self.gridLayout.addWidget(self.dateTimeEditFrom, 0, 3, 1, 1)
+        self.doubleSpinBoxK = QtGui.QDoubleSpinBox(self.tabStatistic)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.doubleSpinBoxK.sizePolicy().hasHeightForWidth())
+        self.doubleSpinBoxK.setSizePolicy(sizePolicy)
+        self.doubleSpinBoxK.setButtonSymbols(QtGui.QAbstractSpinBox.PlusMinus)
+        self.doubleSpinBoxK.setDecimals(3)
+        self.doubleSpinBoxK.setProperty("value", 1.0)
+        self.doubleSpinBoxK.setObjectName(_fromUtf8("doubleSpinBoxK"))
+        self.gridLayout.addWidget(self.doubleSpinBoxK, 0, 1, 1, 1)
+        self.dateTimeEditTo = QtGui.QDateTimeEdit(self.tabStatistic)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.dateTimeEditTo.sizePolicy().hasHeightForWidth())
+        self.dateTimeEditTo.setSizePolicy(sizePolicy)
+        self.dateTimeEditTo.setObjectName(_fromUtf8("dateTimeEditTo"))
+        self.gridLayout.addWidget(self.dateTimeEditTo, 0, 5, 1, 1)
+        self.label_To = QtGui.QLabel(self.tabStatistic)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_To.sizePolicy().hasHeightForWidth())
+        self.label_To.setSizePolicy(sizePolicy)
+        self.label_To.setObjectName(_fromUtf8("label_To"))
+        self.gridLayout.addWidget(self.label_To, 0, 4, 1, 1)
+        self.pushButtonAnalyze = QtGui.QPushButton(self.tabStatistic)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pushButtonAnalyze.sizePolicy().hasHeightForWidth())
+        self.pushButtonAnalyze.setSizePolicy(sizePolicy)
+        self.pushButtonAnalyze.setObjectName(_fromUtf8("pushButtonAnalyze"))
+        self.gridLayout.addWidget(self.pushButtonAnalyze, 0, 6, 1, 1)
+        self.label_Formula = QtGui.QLabel(self.tabStatistic)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_Formula.setFont(font)
+        self.label_Formula.setObjectName(_fromUtf8("label_Formula"))
+        self.gridLayout.addWidget(self.label_Formula, 0, 0, 1, 1)
+        spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem1, 0, 7, 1, 1)
+        self.verticalLayout_7.addLayout(self.gridLayout)
+        self.scrollArea = QtGui.QScrollArea(self.tabStatistic)
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
+        self.scrollAreaWidgetContents = QtGui.QWidget()
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 650, 400))
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.scrollAreaWidgetContents.sizePolicy().hasHeightForWidth())
+        self.scrollAreaWidgetContents.setSizePolicy(sizePolicy)
+        self.scrollAreaWidgetContents.setMinimumSize(QtCore.QSize(650, 400))
+        self.scrollAreaWidgetContents.setMaximumSize(QtCore.QSize(650, 400))
+        self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
+        self.verticalLayout_8 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout_8.setSpacing(0)
+        self.verticalLayout_8.setMargin(0)
+        self.verticalLayout_8.setObjectName(_fromUtf8("verticalLayout_8"))
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        self.verticalLayout_7.addWidget(self.scrollArea)
+        self.horizontalLayout_2 = QtGui.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
+        self.label_Total = QtGui.QLabel(self.tabStatistic)
+        self.label_Total.setObjectName(_fromUtf8("label_Total"))
+        self.horizontalLayout_2.addWidget(self.label_Total)
+        self.labelTotalEnergy = QtGui.QLabel(self.tabStatistic)
+        self.labelTotalEnergy.setObjectName(_fromUtf8("labelTotalEnergy"))
+        self.horizontalLayout_2.addWidget(self.labelTotalEnergy)
+        spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem2)
+        self.verticalLayout_7.addLayout(self.horizontalLayout_2)
+        self.textBrowser = QtGui.QTextBrowser(self.tabStatistic)
+        self.textBrowser.setTextInteractionFlags(QtCore.Qt.TextSelectableByMouse)
+        self.textBrowser.setObjectName(_fromUtf8("textBrowser"))
+        self.verticalLayout_7.addWidget(self.textBrowser)
+        self.verticalLayout_7.setStretch(1, 5)
         self.tabWidget.addTab(self.tabStatistic, _fromUtf8(""))
         self.horizontalLayout.addWidget(self.tabWidget)
         self.verticalLayout.addLayout(self.horizontalLayout)
@@ -428,7 +536,7 @@ class Ui_MainWindow(object):
         self.toolBar.addAction(self.actionQuit)
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(3)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -447,8 +555,81 @@ class Ui_MainWindow(object):
         self.labelLog.setText(_translate("MainWindow", "资源池日志", None))
         self.pushButtonSaveLog.setText(_translate("MainWindow", "输出日志到log.txt", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabLog), _translate("MainWindow", "日志", None))
-        self.label.setText(_translate("MainWindow", "动态数据", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabStatistic), _translate("MainWindow", "综合分析", None))
+        self.label.setText(_translate("MainWindow", "动态视图", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabWatch), _translate("MainWindow", "数据监测", None))
+        self.label_Form.setText(_translate("MainWindow", "时间从", None))
+        self.label_To.setText(_translate("MainWindow", "到", None))
+        self.pushButtonAnalyze.setText(_translate("MainWindow", "分析", None))
+        self.label_Formula.setText(_translate("MainWindow", "k=", None))
+        self.label_Total.setText(_translate("MainWindow", "总能耗：", None))
+        self.labelTotalEnergy.setText(_translate("MainWindow", "0", None))
+        self.textBrowser.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:x-large; font-weight:600;\">表达式参考</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">e<span style=\" vertical-align:sub;\">c</span> = E<span style=\" vertical-align:sub;\">c</span>t∫f<span style=\" vertical-align:sub;\">c</span>(x) = E<span style=\" vertical-align:sub;\">c</span>∑Tf<span style=\" vertical-align:sub;\">c</span>(nT/t) </p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">e<span style=\" vertical-align:sub;\">m</span> = E<span style=\" vertical-align:sub;\">m</span>t∫f<span style=\" vertical-align:sub;\">m</span>(x) = E<span style=\" vertical-align:sub;\">m</span>∑Tf<span style=\" vertical-align:sub;\">m</span>(nT/t) </p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">E<span style=\" vertical-align:sub;\">c</span>/E<span style=\" vertical-align:sub;\">m</span> = 1/k </p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">e = e<span style=\" vertical-align:sub;\">c</span> + e<span style=\" vertical-align:sub;\">m</span> = E<span style=\" vertical-align:sub;\">c</span>∑Tf<span style=\" vertical-align:sub;\">c</span>(nT/t) + E<span style=\" vertical-align:sub;\">m</span>∑Tf<span style=\" vertical-align:sub;\">m</span>(nT/t) </p>\n"
+"<table border=\"1\" style=\" margin-top:5px; margin-bottom:0px; margin-left:0px; margin-right:0px;\" cellspacing=\"0\" cellpadding=\"2\"><thead>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">符号</span></p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">描述</span></p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">单位</span></p></td></tr></thead>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">E<span style=\" vertical-align:sub;\">c</span></p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">CPU能耗 </p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">W/prec*s </p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">E<span style=\" vertical-align:sub;\">m</span></p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">内存能耗 </p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">W/MB*s </p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">e<span style=\" vertical-align:sub;\">c</span></p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">CPU总能耗 </p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">W </p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">e<span style=\" vertical-align:sub;\">m</span></p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">内存总能耗 </p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">W </p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">t </p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">运行总时间 </p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">s </p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">T </p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">以5s为间隔的测量时间 </p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">s </p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">e </p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">总能耗 </p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">W </p></td></tr></table></body></html>", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabStatistic), _translate("MainWindow", "能耗分析", None))
         self.menuVMMigrate.setTitle(_translate("MainWindow", "迁移", None))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar", None))
         self.actionConnect.setText(_translate("MainWindow", "连接", None))

@@ -103,12 +103,12 @@ class RRDUpdates:
         node = self.data_node.childNodes[self.rows - 1 - row].childNodes[0]
         return int(node.firstChild.toxml()) # node.firstChild should have nodeType TEXT_NODE
 
-    def refresh(self, session, override_params = {}, server = 'http://localhost'):
+    def refresh(self, session, override_params = {}, server = 'http://localhost', urlstr="%s/rrd_updates?%s"):
         params = override_params
         params['session_id'] = session
         params.update(self.params)
         paramstr = "&".join(["%s=%s"  % (k,params[k]) for k in params])
-        url = "%s/rrd_updates?%s" % (server, paramstr)
+        url = urlstr % (server, paramstr)
 
         print "RRD Query:\n %s" % url
         # this is better than urllib.urlopen() as it raises an Exception on http 401 'Unauthorised' error
