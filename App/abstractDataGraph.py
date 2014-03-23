@@ -45,7 +45,7 @@ class EnergyAsix(pg.AxisItem):
         strns = []
         for x in values:
             try:
-                strns.append(str(x / 1000))
+                strns.append(str(x))
             except ValueError:
                 strns.append('')
         return strns

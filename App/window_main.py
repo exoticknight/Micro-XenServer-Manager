@@ -91,6 +91,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.poolMasterInfo = None
         self.poolDataIndex = {}.fromkeys(('hostIndex', 'vmIndex'))
         self.operationLock = False
+        self.canQueryData = True
+        self.totalEnergy = 0
 
         # initial xen manager
         self.xenManager = XenManager.manager.Manager()
@@ -101,7 +103,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # initial data monitor timer
         self.dataMonitorTimer = QTimer(self)
-        self.dataMonitorTimer.timeout.connect(self.monitoringData)
+        self.dataMonitorTimer.timeout.connect(self.acquireData)
+
+        # initial statistic timer
+        self.statisticTimer = QTimer(self)
+        self.statisticTimer.timeout.connect(self.updateStatistic)
 
         # model for QTreeView
         self.poolTreeModel = None
@@ -127,8 +133,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # customize ui
         #self.setWindowFlags(Qt.FramelessWindowHint)
         #self.ui.statusBar.setSizeGripEnabled(True)
-        self.ui.dateTimeEditTo.setDateTime(QDateTime.currentDateTime())
-        self.ui.dateTimeEditFrom.setDateTime(QDateTime.currentDateTime().addSecs(-60))
+        self.ui.buttonStatisticOff.hide()
 
         # initial data graph
         self.liveDataGraph = None
@@ -224,28 +229,49 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.actionDisconnect.triggered.connect(self.onActionDisconnect)
         self.ui.actionQuit.triggered.connect(self.onActionQuit)
         self.ui.menuVMMigrate.aboutToShow.connect(self.menuMigrateToShow)
+        self.ui.actionWatchOn.triggered.connect(self.onActionWatchOn)
+        self.ui.actionWatchOff.triggered.connect(self.onActionWatchOff)
+        self.ui.buttonStatisticOn.clicked.connect(self.statisticOn)
+        self.ui.buttonStatisticOff.clicked.connect(self.statisticOff)
 
         # ui event
         self.ui.treeView.clicked.connect(self.onTreeItemClicked)
 
         # button event
         self.ui.pushButtonSaveLog.clicked.connect(self.saveLogToFile)
-        self.ui.pushButtonAnalyze.clicked.connect(self.generateStatistic)
 
     def monitoringVMs(self):
         if self.poolDataIndex.get('vmIndex') is None:
             return
 
         changed = False
-        # qDebug('-------------------------')
+
+        #check host
+        for OpaqueRef, hostNode in self.poolDataIndex['hostIndex'].items():
+            # skip null
+            if OpaqueRef == 'OpaqueRef:NULL':
+                continue
+
+            oldRecord = hostNode.data()
+            try:
+                newRecord = self.xenManager.xenapi.host.get_record(OpaqueRef)
+            except Exception, e:
+                pass
+            else:
+                # check whether 'power_state' is changed
+                if oldRecord['enabled'] != newRecord['enabled']:
+                    # update data with the new record
+                    newRecord['OpaqueRef'] = oldRecord['OpaqueRef']
+                    hostNode.data(newRecord)
+                    # update flag
+                    changed = True
+
+        # check vm
         for OpaqueRef, vmNode in self.poolDataIndex['vmIndex'].items():
             oldRecord = vmNode.data()
             try:
                 newRecord = self.xenManager.xenapi.VM.get_record(OpaqueRef)
-                # qDebug('old ' + oldRecord['name_label'] + ' ' + oldRecord['power_state'])
-                # qDebug('new ' + oldRecord['name_label'] + ' ' + newRecord['power_state'])
             except Exception, e:
-                # qDebug('miss ' + oldRecord['name_label'])
                 pass
             else:
                 # check whether 'power_state' is changed
@@ -256,11 +282,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     # update flag
                     changed = True
 
+
                 # check whether 'resident_on' is changed
                 if oldRecord['resident_on'] != newRecord['resident_on']:
 
-                    # remove it from old host and add it to new host
-                    self.poolDataIndex['hostIndex'][oldRecord['resident_on']].deleteChild(vmNode)
+                    if oldRecord['affinity'] != 'OpaqueRef:NULL':
+                        # remove it from old host and add it to new host
+                        self.poolDataIndex['hostIndex'][oldRecord['resident_on']].deleteChild(vmNode)
+
                     if newRecord['resident_on'] == 'OpaqueRef:NULL':
                         self.poolDataIndex['hostIndex'][newRecord['affinity']].addChild(vmNode)
                     else:
@@ -272,13 +301,49 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     # update flag
                     changed = True
 
+
         if changed:
             self.poolTreeModel.reset()
             self.ui.treeView.expandAll()
 
-    def monitoringData(self):
+    def acquireData(self):
         # TODO replace the tuple with dynamic data
         self.liveDataGraph.refresh(['192.168.1.251', '192.168.1.252'])
+
+    def updateStatistic(self):
+
+        # data structure
+        data = 0.0
+
+        # get parameters
+        paramK = self.ui.doubleSpinBoxK.value()
+        paramT = 5   # T
+        formula = lambda t, c, m, k: t * (c + k * m)
+
+        now = int(time.time()) - 60
+
+        parser = RRDUpdates()
+        for ip in [x.ip() for x in self.poolDataIndex['hostIndex'].values() if x.type() == 'HOST' and x.enable()]:
+
+            try:
+                # query the data from host
+                parser.refresh(self.xenManager.get_session_ref(), {'start': now}, server='http://' + ip)
+            except IOError, e:
+                continue
+                pass
+
+            if parser.get_nrows() == 0:
+                break
+            # only parse the first data
+            paramM = (parser.get_host_data('memory_total_kib', 0) - parser.get_host_data('memory_free_kib', 0)) / 1024 / 1024  # KB->GB
+            paramC = parser.get_host_data('cpu_avg', 0) * 100
+            data = data + formula(paramT, paramC, paramM, paramK)
+
+        self.totalEnergy = self.totalEnergy + data
+
+        self.statisticDataGraph.renderGraph(x=[now], y=[self.totalEnergy], pen=None, symbol='o')
+
+        self.ui.labelTotalEnergy.setText(str('{0}E+3 Ec'.format(self.totalEnergy / 1000)))
 
     '''
     ui stuff start
@@ -419,54 +484,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.statisticDataGraph = StatisticDataGraph(self, background='#FFFFFF')
         self.ui.verticalLayout_8.addWidget(self.statisticDataGraph)
 
-    def generateStatistic(self):
-        paramFromTime = int(time.mktime(self.ui.dateTimeEditFrom.dateTime().toPyDateTime().timetuple()))
-        paramToTime = int(time.mktime(self.ui.dateTimeEditTo.dateTime().toPyDateTime().timetuple()))
-        if paramFromTime >= paramToTime:
-            return
-
-        # data structure
-        data = [[], []]
-
-        # get parameters
-        paramK = self.ui.doubleSpinBoxK.value()
-        paramT = 5   # T
-        formula = lambda t, c, m, k: t * (c + k * m)
-
-        totalEnergy = 0
-        urlParam = {'start': paramFromTime, 'end': paramToTime}
-        parser = RRDUpdates()
-        for ip in [x.ip() for x in self.poolDataIndex['hostIndex'].values() if x.type() == 'HOST']:
-            totalEnergyPerIp = 0
-            dataPerIp = [[], []]
-
-            # query the data from host
-            parser.refresh(self.xenManager.get_session_ref(), urlParam, server='http://' + ip)
-
-            # parse data
-            for row in range(0, parser.get_nrows()):
-                paramM = (parser.get_host_data('memory_total_kib', row) - parser.get_host_data('memory_free_kib', row)) / 1024   # KB->MB
-                paramC = parser.get_host_data('cpu_avg', row) * 100
-                totalEnergyPerIp = totalEnergyPerIp + formula(paramT, paramC, paramM, paramK)
-
-                dataPerIp[0].append(parser.get_row_time(row))
-                dataPerIp[1].append(totalEnergyPerIp)
-
-            # update the whole data
-            if len(data[0]) == 0:
-                data[0] = dataPerIp[0][:]
-                data[1] = dataPerIp[1][:]
-            else:
-                data[1] = [data[1][index] + x for index, x in enumerate(dataPerIp[1][:len(data[1])])]
-
-        self.statisticDataGraph.renderGraph(x=data[0][:len(data[1])], y=data[1])
-        print data[0]
-        print data[1]
-
-        self.ui.labelTotalEnergy.setText(str('{0}Ec W'.format(data[1][-1])))
-
-        self.updateStatus('分析完成.', 2000)
-
     def updateProgress(self, value):
         '''update the main progress'''
         if 0 <= value <= 100:
@@ -528,12 +545,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 # begin to monitoring state of vm
                 self.stateMonitorTimer.start(2000)
 
-                # begin to acquire data
-                self.liveDataGraph.bindSession(self.xenManager.get_session_ref())
-                self.dataMonitorTimer.start(5000)
+                # enable actions
+                self.ui.actionConnect.setVisible(False)
+                self.ui.actionDisconnect.setVisible(True)
 
-                # enable disconnect action
                 self.ui.actionDisconnect.setEnabled(True)
+                self.ui.actionWatchOn.setEnabled(True)
+                self.ui.actionStatisticOn.setEnabled(True)
 
                 # notify the user
                 self.ui.statusBar.showMessage(self.tr('已取得虚拟机信息。'), 2000)
@@ -541,16 +559,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def onActionDisconnect(self):
         if self.xenManager.is_connected():
             # stop monitoring and clear all data
+            self.ui.actionWatchOff.trigger()
+            self.ui.actionStatisticOff.trigger()
             self.stateMonitorTimer.stop()
             self.dataMonitorTimer.stop()
             self.liveDataGraph.unbindSession()
-            self.xenManager.disconnect()
             self.poolMasterInfo = None
             self.poolTreeModel.clear()
             self.poolDataIndex = {}.fromkeys(('hostIndex', 'vmIndex'))
             self.operationLock = False
-            self.ui.actionDisconnect.setEnabled(False)
             self.ui.menuVMMigrate.clear()
+
+            self.xenManager.disconnect()
+
+            self.ui.actionDisconnect.setVisible(False)
+            self.ui.actionConnect.setVisible(True)
+            self.ui.actionWatchOn.setEnabled(False)
+            self.ui.actionStatisticOn.setEnabled(False)
+
         self.ui.statusBar.showMessage(self.tr('已经断开连接。'))
 
     def onActionQuit(self):
@@ -569,6 +595,36 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.connect(self.t, SIGNAL('updateProgress(int)'), self.updateProgress)
         self.connect(self.t, SIGNAL('result(QVariant)'), self.takeResult)
         self.t.start()
+
+    def onActionWatchOn(self):
+        if not self.canQueryData:
+            return
+        self.liveDataGraph.bindSession(self.xenManager.get_session_ref())
+        self.dataMonitorTimer.start(5000)
+        self.canQueryData = False
+        self.ui.actionWatchOn.setVisible(False)
+        self.ui.actionWatchOff.setVisible(True)
+
+    def onActionWatchOff(self):
+        self.dataMonitorTimer.stop()
+        self.canQueryData = True
+        self.ui.actionWatchOff.setVisible(False)
+        self.ui.actionWatchOn.setVisible(True)
+
+    def statisticOn(self):
+        if not self.canQueryData:
+            return
+        self.statisticDataGraph.bindSession(self.xenManager.get_session_ref())
+        self.statisticTimer.start(5000)
+        self.canQueryData = False
+        self.ui.buttonStatisticOn.hide()
+        self.ui.buttonStatisticOff.show()
+
+    def statisticOff(self):
+        self.statisticTimer.stop()
+        self.canQueryData = True
+        self.ui.buttonStatisticOff.hide()
+        self.ui.buttonStatisticOn.show()
 
     def menuMigrateToShow(self):
         '''figure out which host can receive current vm

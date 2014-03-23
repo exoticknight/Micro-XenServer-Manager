@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="icon">
+    <file>resource/eye.png</file>
+    <file>resource/eye_closed.png</file>
     <file>resource/quit.png</file>
     <file>resource/favicon.png</file>
     <file>resource/connect.png</file>

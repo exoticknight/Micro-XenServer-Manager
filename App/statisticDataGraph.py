@@ -23,6 +23,6 @@ class StatisticDataGraph(AbstractDataGraph):
 
     def renderGraph(self, *args, **kwargs):
         try:
-            self._plot.plot(pen=(170, 0, 255), *args, **kwargs)
+            self._plot.plot(*args, **kwargs)
         except Exception, e:
             print e

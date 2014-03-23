@@ -123,7 +123,7 @@ QProgressBar{
          </font>
         </property>
         <property name="currentIndex">
-         <number>3</number>
+         <number>0</number>
         </property>
         <property name="elideMode">
          <enum>Qt::ElideLeft</enum>
@@ -571,19 +571,19 @@ QProgressBar{
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>690</width>
+               <width>650</width>
                <height>800</height>
               </rect>
              </property>
              <property name="minimumSize">
               <size>
-               <width>690</width>
+               <width>650</width>
                <height>800</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
-               <width>690</width>
+               <width>650</width>
                <height>800</height>
               </size>
              </property>
@@ -604,45 +604,56 @@ QProgressBar{
          <attribute name="title">
           <string>能耗分析</string>
          </attribute>
-         <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,5,0,0">
+         <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,5,0">
           <property name="spacing">
            <number>0</number>
           </property>
           <item>
-           <layout class="QGridLayout" name="gridLayout">
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <property name="spacing">
+             <number>10</number>
+            </property>
             <property name="bottomMargin">
              <number>5</number>
             </property>
-            <property name="horizontalSpacing">
-             <number>7</number>
-            </property>
-            <property name="verticalSpacing">
-             <number>0</number>
-            </property>
-            <item row="0" column="2">
-             <widget class="QLabel" name="label_Form">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>时间从</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="3">
-             <widget class="QDateTimeEdit" name="dateTimeEditFrom">
+            <item>
+             <widget class="QPushButton" name="buttonStatisticOn">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="text">
+               <string>开始分析</string>
+              </property>
              </widget>
             </item>
-            <item row="0" column="1">
+            <item>
+             <widget class="QPushButton" name="buttonStatisticOff">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="text">
+               <string>暂停分析</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_Formula">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>k=</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QDoubleSpinBox" name="doubleSpinBoxK">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -661,57 +672,21 @@ QProgressBar{
               </property>
              </widget>
             </item>
-            <item row="0" column="5">
-             <widget class="QDateTimeEdit" name="dateTimeEditTo">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="4">
-             <widget class="QLabel" name="label_To">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
+            <item>
+             <widget class="QLabel" name="label_Total">
               <property name="text">
-               <string>到</string>
+               <string>总能耗：</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="6">
-             <widget class="QPushButton" name="pushButtonAnalyze">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
+            <item>
+             <widget class="QLabel" name="labelTotalEnergy">
               <property name="text">
-               <string>分析</string>
+               <string>0</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_Formula">
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-                <weight>50</weight>
-                <bold>false</bold>
-               </font>
-              </property>
-              <property name="text">
-               <string>k=</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="7">
+            <item>
              <spacer name="horizontalSpacer_3">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -770,37 +745,6 @@ QProgressBar{
            </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item>
-             <widget class="QLabel" name="label_Total">
-              <property name="text">
-               <string>总能耗：</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="labelTotalEnergy">
-              <property name="text">
-               <string>0</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-          <item>
            <widget class="QTextBrowser" name="textBrowser">
             <property name="html">
              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -833,7 +777,7 @@ p, li { white-space: pre-wrap; }
 &lt;td&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;内存能耗 &lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;W/MB*s &lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;W/GB*s &lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;e&lt;span style=&quot; vertical-align:sub;&quot;&gt;c&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
@@ -924,7 +868,6 @@ p, li { white-space: pre-wrap; }
     </property>
     <addaction name="actionConnect"/>
     <addaction name="actionDisconnect"/>
-    <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuRunningVM">
@@ -976,11 +919,19 @@ p, li { white-space: pre-wrap; }
     </property>
     <addaction name="actionVMResume"/>
    </widget>
+   <widget class="QMenu" name="menuWatch">
+    <property name="title">
+     <string/>
+    </property>
+    <addaction name="actionWatchOn"/>
+    <addaction name="actionWatchOff"/>
+   </widget>
    <addaction name="menuMain"/>
    <addaction name="menuRunningVM"/>
    <addaction name="menuHaltedVM"/>
    <addaction name="menuHost"/>
    <addaction name="menuSuspendedVM"/>
+   <addaction name="menuWatch"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
@@ -1000,12 +951,14 @@ p, li { white-space: pre-wrap; }
    </attribute>
    <addaction name="actionConnect"/>
    <addaction name="actionDisconnect"/>
+   <addaction name="actionWatchOn"/>
+   <addaction name="actionWatchOff"/>
    <addaction name="actionQuit"/>
   </widget>
   <action name="actionConnect">
    <property name="icon">
     <iconset resource="resource.qrc">
-     <normaloff>:/icon/resource/connect.png</normaloff>:/icon/resource/connect.png</iconset>
+     <normaloff>:/icon/resource/disconnect.png</normaloff>:/icon/resource/disconnect.png</iconset>
    </property>
    <property name="text">
     <string>连接</string>
@@ -1021,15 +974,21 @@ p, li { white-space: pre-wrap; }
    </property>
   </action>
   <action name="actionDisconnect">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
    <property name="enabled">
     <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="resource.qrc">
-     <normaloff>:/icon/resource/disconnect.png</normaloff>:/icon/resource/disconnect.png</iconset>
+     <normaloff>:/icon/resource/connect.png</normaloff>:/icon/resource/connect.png</iconset>
    </property>
    <property name="text">
     <string>断开</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
    </property>
   </action>
   <action name="actionVMSuspend">
@@ -1070,6 +1029,54 @@ p, li { white-space: pre-wrap; }
   <action name="actionVMResume">
    <property name="text">
     <string>恢复</string>
+   </property>
+  </action>
+  <action name="actionWatchOn">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icon/resource/eye_closed.png</normaloff>:/icon/resource/eye_closed.png</iconset>
+   </property>
+   <property name="text">
+    <string>打开数据监测</string>
+   </property>
+  </action>
+  <action name="actionWatchOff">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icon/resource/eye.png</normaloff>:/icon/resource/eye.png</iconset>
+   </property>
+   <property name="text">
+    <string>关闭数据监测</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionStatisticOn">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/icon/resource/statistic_close.png</normaloff>:/icon/resource/statistic_close.png</iconset>
+   </property>
+   <property name="text">
+    <string>打开能耗分析</string>
+   </property>
+  </action>
+  <action name="actionStatisticOff">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/icon/resource/statistic_start.png</normaloff>:/icon/resource/statistic_start.png</iconset>
+   </property>
+   <property name="text">
+    <string>关闭能耗分析</string>
+   </property>
+   <property name="visible">
+    <bool>true</bool>
    </property>
   </action>
  </widget>

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Z:\python\Micro-XenServer-Manager\App\ui_login.ui'
 #
-# Created: Wed Feb 19 20:58:36 2014
+# Created: Sun Feb 23 03:11:49 2014
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!

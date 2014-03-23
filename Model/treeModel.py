@@ -94,6 +94,9 @@ class HostNode(GenericNode):
     def type(self):
         return 'HOST'
 
+    def enable(self):
+        return self._data['enabled']
+
     def ip(self):
         return self._data['address']
 
