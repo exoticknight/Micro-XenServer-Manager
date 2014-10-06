@@ -2,43 +2,7 @@
 '''
 @auther: exoticknight, JP
 
-!!VM_BASIC_INFORMATION
-VM_BASIC_INFORMATION is a dict, including the "ref" as the key, the "ref" of resident host, the "name_label" and the "uuid"
-e.g.
-{
-'OpaqueRef:ff43cebe-ec74-12bd-8669-4f25a145fddf':
-    {
-    'resident_on': 'OpaqueRef:5c986432-c0af-cb32-ed14-e0e4572ba603',
-    'name_label': 'Windows XP SP3 (32-bit) (2)',
-    'uuid': '1c9fc8c4-7a9e-23d0-beab-750e512ef2bb'
-    },
-'OpaqueRef:70b5ec6c-935d-69bf-92d9-3340bfe403d9':
-    {
-    'resident_on': 'OpaqueRef:af45a618-ec08-0983-e2ea-d920c051e97e',
-    'name_label': 'Windows XP SP3 (32-bit) (1)',
-    'uuid': '98b8007e-35b3-e19b-19e3-b64ed8ecdfeb'
-    }
-}
-
-!!HOST_BASIC_INFORMATION
-HOST_BASIC_INFORMATION is a dict, including "name_label", "address", "resident_VMs"
-e.g.
-{
-'OpaqueRef:5c986432-c0af-cb32-ed14-e0e4572ba603':
-    {
-    'address': '192.168.1.251',
-    'name_label': 'xenserver-gcotucod',
-    'resident_VMs': ['OpaqueRef:4165e1de-14f7-789d-b0c3-ac750e2b31cf']
-    },
-'OpaqueRef:af45a618-ec08-0983-e2ea-d920c051e97e':
-    {
-    'address': '192.168.1.252',
-    'name_label': 'xenserver-wdhqtslp',
-    'resident_VMs': ['OpaqueRef:da4c572c-b3ea-ca32-b989-c7219601cb44']
-    }
-}
-
-provided APIs:
+provide APIs:
 ---session control---
     void connect(string ip, string username, string password, number cache_timeout=30)
     void disconnect()
@@ -424,13 +388,27 @@ class Manager():
         return hosts
 
     def start_host(self, host_ref):
-        pass
+        try:
+            self.xenapi.host.power_on(host_ref)
+        except XenAPI.Failure, e:
+            print e
+            raise ManagerError, e
 
     def shutdown_host(self, host_ref):
-        pass
+        try:
+            self.xenapi.host.disable(host_ref)
+            self.xenapi.host.shutdown(host_ref)
+        except XenAPI.Failure, e:
+            print e
+            raise ManagerError, e
 
     def reboot_host(self, host_ref):
-        pass
+        try:
+            self.xenapi.host.disable(host_ref)
+            self.xenapi.host.reboot(host_ref)
+        except XenAPI.Failure, e:
+            print e
+            raise ManagerError, e
 
     '''
     ---host control APIs end---

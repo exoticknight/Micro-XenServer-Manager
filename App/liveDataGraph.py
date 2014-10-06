@@ -16,11 +16,7 @@ class LiveDataGraph(AbstractDataGraph):
         # self._sessionRef = None
         # self._rrdParser = RRDUpdates()
         self._metricsPlot = {}.fromkeys(('loadavg', 'cpu_avg', 'Used Memory'))
-        self._metricsColor = {
-            'loadavg': [(0, 80, 238), (229, 20, 0)],
-            'cpu_avg': [(0, 80, 238), (229, 20, 0)],
-            'Used Memory': [(0, 80, 238), (229, 20, 0)]
-        }
+        self._metricsColor = [(0, 80, 238), (229, 20, 0), (79, 239, 0), (242, 239, 14)]
 
         # initial render
         l = pg.GraphicsLayout()
@@ -73,5 +69,5 @@ class LiveDataGraph(AbstractDataGraph):
 
             # update the graph
             for title, plot in self._metricsPlot.items():
-                plot.plot(x=data['time'], y=data['data'][title], pen=self._metricsColor[title][index])
+                plot.plot(x=data['time'], y=data['data'][title], pen=self._metricsColor[index])
 

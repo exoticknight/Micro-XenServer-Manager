@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Z:\python\Micro-XenServer-Manager\App\ui_main.ui'
 #
-# Created: Mon Feb 24 09:35:26 2014
+# Created: Fri Apr 11 12:31:01 2014
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -167,35 +167,19 @@ class Ui_MainWindow(object):
         font.setPointSize(10)
         self.label_3.setFont(font)
         self.label_3.setObjectName(_fromUtf8("label_3"))
-        self.formLayout_2.setWidget(4, QtGui.QFormLayout.LabelRole, self.label_3)
-        self.lineEdit_OpaqueRef = QtGui.QLineEdit(self.frame)
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.lineEdit_OpaqueRef.setFont(font)
-        self.lineEdit_OpaqueRef.setFrame(False)
-        self.lineEdit_OpaqueRef.setReadOnly(True)
-        self.lineEdit_OpaqueRef.setObjectName(_fromUtf8("lineEdit_OpaqueRef"))
-        self.formLayout_2.setWidget(4, QtGui.QFormLayout.FieldRole, self.lineEdit_OpaqueRef)
+        self.formLayout_2.setWidget(5, QtGui.QFormLayout.LabelRole, self.label_3)
         self.label_5 = QtGui.QLabel(self.frame)
         font = QtGui.QFont()
         font.setPointSize(10)
         self.label_5.setFont(font)
         self.label_5.setObjectName(_fromUtf8("label_5"))
-        self.formLayout_2.setWidget(6, QtGui.QFormLayout.LabelRole, self.label_5)
-        self.lineEdit_power_state = QtGui.QLineEdit(self.frame)
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.lineEdit_power_state.setFont(font)
-        self.lineEdit_power_state.setFrame(False)
-        self.lineEdit_power_state.setReadOnly(True)
-        self.lineEdit_power_state.setObjectName(_fromUtf8("lineEdit_power_state"))
-        self.formLayout_2.setWidget(6, QtGui.QFormLayout.FieldRole, self.lineEdit_power_state)
+        self.formLayout_2.setWidget(7, QtGui.QFormLayout.LabelRole, self.label_5)
         self.label_6 = QtGui.QLabel(self.frame)
         font = QtGui.QFont()
         font.setPointSize(10)
         self.label_6.setFont(font)
         self.label_6.setObjectName(_fromUtf8("label_6"))
-        self.formLayout_2.setWidget(7, QtGui.QFormLayout.LabelRole, self.label_6)
+        self.formLayout_2.setWidget(8, QtGui.QFormLayout.LabelRole, self.label_6)
         self.lineEdit_VCPUs_at_startup = QtGui.QLineEdit(self.frame)
         font = QtGui.QFont()
         font.setPointSize(10)
@@ -203,13 +187,13 @@ class Ui_MainWindow(object):
         self.lineEdit_VCPUs_at_startup.setFrame(False)
         self.lineEdit_VCPUs_at_startup.setReadOnly(True)
         self.lineEdit_VCPUs_at_startup.setObjectName(_fromUtf8("lineEdit_VCPUs_at_startup"))
-        self.formLayout_2.setWidget(7, QtGui.QFormLayout.FieldRole, self.lineEdit_VCPUs_at_startup)
+        self.formLayout_2.setWidget(8, QtGui.QFormLayout.FieldRole, self.lineEdit_VCPUs_at_startup)
         self.label_7 = QtGui.QLabel(self.frame)
         font = QtGui.QFont()
         font.setPointSize(10)
         self.label_7.setFont(font)
         self.label_7.setObjectName(_fromUtf8("label_7"))
-        self.formLayout_2.setWidget(8, QtGui.QFormLayout.LabelRole, self.label_7)
+        self.formLayout_2.setWidget(9, QtGui.QFormLayout.LabelRole, self.label_7)
         self.lineEdit_memory_target = QtGui.QLineEdit(self.frame)
         font = QtGui.QFont()
         font.setPointSize(10)
@@ -217,7 +201,7 @@ class Ui_MainWindow(object):
         self.lineEdit_memory_target.setFrame(False)
         self.lineEdit_memory_target.setReadOnly(True)
         self.lineEdit_memory_target.setObjectName(_fromUtf8("lineEdit_memory_target"))
-        self.formLayout_2.setWidget(8, QtGui.QFormLayout.FieldRole, self.lineEdit_memory_target)
+        self.formLayout_2.setWidget(9, QtGui.QFormLayout.FieldRole, self.lineEdit_memory_target)
         self.label_9 = QtGui.QLabel(self.frame)
         self.label_9.setObjectName(_fromUtf8("label_9"))
         self.formLayout_2.setWidget(3, QtGui.QFormLayout.LabelRole, self.label_9)
@@ -234,7 +218,7 @@ class Ui_MainWindow(object):
         font.setPointSize(10)
         self.label_10.setFont(font)
         self.label_10.setObjectName(_fromUtf8("label_10"))
-        self.formLayout_2.setWidget(5, QtGui.QFormLayout.LabelRole, self.label_10)
+        self.formLayout_2.setWidget(6, QtGui.QFormLayout.LabelRole, self.label_10)
         self.lineEdit_tags = QtGui.QLineEdit(self.frame)
         font = QtGui.QFont()
         font.setPointSize(10)
@@ -242,7 +226,23 @@ class Ui_MainWindow(object):
         self.lineEdit_tags.setFrame(False)
         self.lineEdit_tags.setReadOnly(True)
         self.lineEdit_tags.setObjectName(_fromUtf8("lineEdit_tags"))
-        self.formLayout_2.setWidget(5, QtGui.QFormLayout.FieldRole, self.lineEdit_tags)
+        self.formLayout_2.setWidget(6, QtGui.QFormLayout.FieldRole, self.lineEdit_tags)
+        self.lineEdit_OpaqueRef = QtGui.QLineEdit(self.frame)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.lineEdit_OpaqueRef.setFont(font)
+        self.lineEdit_OpaqueRef.setFrame(False)
+        self.lineEdit_OpaqueRef.setReadOnly(True)
+        self.lineEdit_OpaqueRef.setObjectName(_fromUtf8("lineEdit_OpaqueRef"))
+        self.formLayout_2.setWidget(7, QtGui.QFormLayout.FieldRole, self.lineEdit_OpaqueRef)
+        self.lineEdit_power_state = QtGui.QLineEdit(self.frame)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.lineEdit_power_state.setFont(font)
+        self.lineEdit_power_state.setFrame(False)
+        self.lineEdit_power_state.setReadOnly(True)
+        self.lineEdit_power_state.setObjectName(_fromUtf8("lineEdit_power_state"))
+        self.formLayout_2.setWidget(5, QtGui.QFormLayout.FieldRole, self.lineEdit_power_state)
         self.verticalLayout_3.addWidget(self.frame)
         self.tabWidget.addTab(self.tabInformation, _fromUtf8(""))
         self.tabLog = QtGui.QWidget()
@@ -349,14 +349,17 @@ class Ui_MainWindow(object):
         self.buttonStatisticOff.setEnabled(True)
         self.buttonStatisticOff.setObjectName(_fromUtf8("buttonStatisticOff"))
         self.horizontalLayout_3.addWidget(self.buttonStatisticOff)
-        self.label_Formula = QtGui.QLabel(self.tabStatistic)
+        self.buttonClear = QtGui.QPushButton(self.tabStatistic)
+        self.buttonClear.setObjectName(_fromUtf8("buttonClear"))
+        self.horizontalLayout_3.addWidget(self.buttonClear)
+        self.label_k = QtGui.QLabel(self.tabStatistic)
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(False)
         font.setWeight(50)
-        self.label_Formula.setFont(font)
-        self.label_Formula.setObjectName(_fromUtf8("label_Formula"))
-        self.horizontalLayout_3.addWidget(self.label_Formula)
+        self.label_k.setFont(font)
+        self.label_k.setObjectName(_fromUtf8("label_k"))
+        self.horizontalLayout_3.addWidget(self.label_k)
         self.doubleSpinBoxK = QtGui.QDoubleSpinBox(self.tabStatistic)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -368,6 +371,20 @@ class Ui_MainWindow(object):
         self.doubleSpinBoxK.setProperty("value", 1.0)
         self.doubleSpinBoxK.setObjectName(_fromUtf8("doubleSpinBoxK"))
         self.horizontalLayout_3.addWidget(self.doubleSpinBoxK)
+        self.label_m = QtGui.QLabel(self.tabStatistic)
+        self.label_m.setObjectName(_fromUtf8("label_m"))
+        self.horizontalLayout_3.addWidget(self.label_m)
+        self.doubleSpinBoxM = QtGui.QDoubleSpinBox(self.tabStatistic)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.doubleSpinBoxM.sizePolicy().hasHeightForWidth())
+        self.doubleSpinBoxM.setSizePolicy(sizePolicy)
+        self.doubleSpinBoxM.setButtonSymbols(QtGui.QAbstractSpinBox.PlusMinus)
+        self.doubleSpinBoxM.setDecimals(3)
+        self.doubleSpinBoxM.setProperty("value", 0.6)
+        self.doubleSpinBoxM.setObjectName(_fromUtf8("doubleSpinBoxM"))
+        self.horizontalLayout_3.addWidget(self.doubleSpinBoxM)
         self.label_Total = QtGui.QLabel(self.tabStatistic)
         self.label_Total.setObjectName(_fromUtf8("label_Total"))
         self.horizontalLayout_3.addWidget(self.label_Total)
@@ -558,75 +575,16 @@ class Ui_MainWindow(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabWatch), _translate("MainWindow", "数据监测", None))
         self.buttonStatisticOn.setText(_translate("MainWindow", "开始分析", None))
         self.buttonStatisticOff.setText(_translate("MainWindow", "暂停分析", None))
-        self.label_Formula.setText(_translate("MainWindow", "k=", None))
+        self.buttonClear.setText(_translate("MainWindow", "清空数据", None))
+        self.label_k.setText(_translate("MainWindow", "k=", None))
+        self.label_m.setText(_translate("MainWindow", "m=", None))
         self.label_Total.setText(_translate("MainWindow", "总能耗：", None))
         self.labelTotalEnergy.setText(_translate("MainWindow", "0", None))
         self.textBrowser.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:x-large; font-weight:600;\">表达式参考</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">e<span style=\" vertical-align:sub;\">c</span> = E<span style=\" vertical-align:sub;\">c</span>t∫f<span style=\" vertical-align:sub;\">c</span>(x) = E<span style=\" vertical-align:sub;\">c</span>∑Tf<span style=\" vertical-align:sub;\">c</span>(nT/t) </p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">e<span style=\" vertical-align:sub;\">m</span> = E<span style=\" vertical-align:sub;\">m</span>t∫f<span style=\" vertical-align:sub;\">m</span>(x) = E<span style=\" vertical-align:sub;\">m</span>∑Tf<span style=\" vertical-align:sub;\">m</span>(nT/t) </p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">E<span style=\" vertical-align:sub;\">c</span>/E<span style=\" vertical-align:sub;\">m</span> = 1/k </p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">e = e<span style=\" vertical-align:sub;\">c</span> + e<span style=\" vertical-align:sub;\">m</span> = E<span style=\" vertical-align:sub;\">c</span>∑Tf<span style=\" vertical-align:sub;\">c</span>(nT/t) + E<span style=\" vertical-align:sub;\">m</span>∑Tf<span style=\" vertical-align:sub;\">m</span>(nT/t) </p>\n"
-"<table border=\"1\" style=\" margin-top:5px; margin-bottom:0px; margin-left:0px; margin-right:0px;\" cellspacing=\"0\" cellpadding=\"2\"><thead>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">符号</span></p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">描述</span></p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">单位</span></p></td></tr></thead>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">E<span style=\" vertical-align:sub;\">c</span></p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">CPU能耗 </p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">W/prec*s </p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">E<span style=\" vertical-align:sub;\">m</span></p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">内存能耗 </p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">W/GB*s </p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">e<span style=\" vertical-align:sub;\">c</span></p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">CPU总能耗 </p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">W </p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">e<span style=\" vertical-align:sub;\">m</span></p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">内存总能耗 </p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">W </p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">t </p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">运行总时间 </p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">s </p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">T </p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">以5s为间隔的测量时间 </p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">s </p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">e </p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">总能耗 </p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">W </p></td></tr></table></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><img src=\":/icon/resource/formula.png\" /></p></body></html>", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabStatistic), _translate("MainWindow", "能耗分析", None))
         self.menuVMMigrate.setTitle(_translate("MainWindow", "迁移", None))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar", None))
