@@ -1,6 +1,5 @@
 <RCC>
   <qresource prefix="icon">
-    <file>resource/formula.png</file>
     <file>resource/eye.png</file>
     <file>resource/eye_closed.png</file>
     <file>resource/quit.png</file>

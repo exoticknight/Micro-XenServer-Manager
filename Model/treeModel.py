@@ -94,7 +94,7 @@ class HostNode(GenericNode):
     def type(self):
         return 'HOST'
 
-    def isEnable(self):
+    def enable(self):
         return self._data['enabled']
 
     def ip(self):
@@ -119,8 +119,8 @@ class PoolTreeModel(QtCore.QAbstractItemModel):
 
             return pixmap
 
-        self._vm_icon = {}.fromkeys(('Running', 'True'), QtGui.QIcon(createPixmap(QtCore.Qt.green)))  # green
-        self._vm_icon['False'] = QtGui.QIcon(createPixmap(QtCore.Qt.gray))  # gray
+        self._vm_icon = {}.fromkeys(('Halted', 'Paused'), QtGui.QIcon(createPixmap(QtCore.Qt.gray)))  # gray
+        self._vm_icon['Running'] = QtGui.QIcon(createPixmap(QtCore.Qt.green))  # green
         self._vm_icon['Suspended'] = QtGui.QIcon(createPixmap(QtCore.Qt.red))  # red
 
     def getNode(self, QModelIndex):
@@ -156,8 +156,6 @@ class PoolTreeModel(QtCore.QAbstractItemModel):
         elif role == QtCore.Qt.DecorationRole:
             if node.type() == 'VM':
                 return self._vm_icon.get(node.state(), None)
-            else:
-                return self._vm_icon.get(str(node.isEnable()), None)
             return None
 
         elif role == QtCore.Qt.UserRole:

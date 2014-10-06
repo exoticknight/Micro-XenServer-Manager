@@ -26,6 +26,3 @@ class StatisticDataGraph(AbstractDataGraph):
             self._plot.plot(*args, **kwargs)
         except Exception, e:
             print e
-
-    def clear(self):
-        self._plot.clear()

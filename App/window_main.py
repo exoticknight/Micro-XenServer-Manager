@@ -120,10 +120,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             'VMShutdown': self.xenManager.shutdown_vm,
             'VMReboot': self.xenManager.reboot_vm,
             'VMSuspend': self.xenManager.suspend_vm,
-            'VMResume': self.xenManager.resume_vm,
-            'HostStart': self.xenManager.start_host,
-            'HostShutdown': self.xenManager.shutdown_host,
-            'HostReboot': self.xenManager.reboot_host
+            'VMResume': self.xenManager.resume_vm
         }
         self.mapActionToOperation()
 
@@ -170,30 +167,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # close connection before close
         self.onActionQuit()
         event.accept()
-
-    def makeConnection(self):
-        # context menu
-        self.ui.treeView.customContextMenuRequested.connect(self.showTreeViewMenu)
-
-        # menu trigger
-        self.ui.actionConnect.triggered.connect(self.onActionConnect)
-        self.ui.actionDisconnect.triggered.connect(self.onActionDisconnect)
-        self.ui.actionQuit.triggered.connect(self.onActionQuit)
-
-        self.ui.menuVMMigrate.aboutToShow.connect(self.menuMigrateToShow)
-
-        self.ui.actionWatchOn.triggered.connect(self.onActionWatchOn)
-        self.ui.actionWatchOff.triggered.connect(self.onActionWatchOff)
-
-        self.ui.buttonStatisticOn.clicked.connect(self.statisticOn)
-        self.ui.buttonStatisticOff.clicked.connect(self.statisticOff)
-        self.ui.buttonClear.clicked.connect(self.clearStatistic)
-
-        # ui event
-        self.ui.treeView.clicked.connect(self.onTreeItemClicked)
-
-        # button event
-        self.ui.pushButtonSaveLog.clicked.connect(self.saveLogToFile)
 
     def mapActionToOperation(self):
 
@@ -247,6 +220,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.connect(self.t, SIGNAL('result(QVariant)'), self.takeResult)
         self.t.start()
 
+    def makeConnection(self):
+        # context menu
+        self.ui.treeView.customContextMenuRequested.connect(self.showTreeViewMenu)
+
+        # menu trigger
+        self.ui.actionConnect.triggered.connect(self.onActionConnect)
+        self.ui.actionDisconnect.triggered.connect(self.onActionDisconnect)
+        self.ui.actionQuit.triggered.connect(self.onActionQuit)
+        self.ui.menuVMMigrate.aboutToShow.connect(self.menuMigrateToShow)
+        self.ui.actionWatchOn.triggered.connect(self.onActionWatchOn)
+        self.ui.actionWatchOff.triggered.connect(self.onActionWatchOff)
+        self.ui.buttonStatisticOn.clicked.connect(self.statisticOn)
+        self.ui.buttonStatisticOff.clicked.connect(self.statisticOff)
+
+        # ui event
+        self.ui.treeView.clicked.connect(self.onTreeItemClicked)
+
+        # button event
+        self.ui.pushButtonSaveLog.clicked.connect(self.saveLogToFile)
+
     def monitoringVMs(self):
         if self.poolDataIndex.get('vmIndex') is None:
             return
@@ -281,58 +274,41 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             except Exception, e:
                 pass
             else:
-                # print oldRecord['name_label']
-                # print oldRecord['power_state'] + " " + newRecord['power_state']
-                # print oldRecord['resident_on'] + " " + newRecord['resident_on']
-                # print oldRecord['affinity'] + " " + newRecord['affinity']
-                # print "-----------------------"
                 # check whether 'power_state' is changed
                 if oldRecord['power_state'] != newRecord['power_state']:
-                    # update flag
-                    changed = True
                     # update data with the new record
                     newRecord['OpaqueRef'] = oldRecord['OpaqueRef']
                     vmNode.data(newRecord)
-
-                # check whether 'resident_on' is changed
-                if oldRecord['resident_on'] != newRecord['resident_on']:
                     # update flag
                     changed = True
 
-                    # start or halt on the same host
-                    # if oldRecord['affinity'] == newRecord['resident_on'] \
-                    #         or oldRecord['resident_on'] == newRecord['affinity']:
-                    #     break
 
-                    # remove it from old host and add it to new host
-                    if oldRecord['resident_on'] == 'OpaqueRef:NULL':
-                        # start vm
-                        self.poolDataIndex['hostIndex'][oldRecord['affinity']].deleteChild(vmNode)
-                    else:
-                        # migrate or halt vm
+                # check whether 'resident_on' is changed
+                if oldRecord['resident_on'] != newRecord['resident_on']:
+
+                    if oldRecord['affinity'] != 'OpaqueRef:NULL':
+                        # remove it from old host and add it to new host
                         self.poolDataIndex['hostIndex'][oldRecord['resident_on']].deleteChild(vmNode)
 
                     if newRecord['resident_on'] == 'OpaqueRef:NULL':
-                        # halt vm
                         self.poolDataIndex['hostIndex'][newRecord['affinity']].addChild(vmNode)
                     else:
-                        # start or migrate vm
                         self.poolDataIndex['hostIndex'][newRecord['resident_on']].addChild(vmNode)
 
                     # update data with the new record
                     newRecord['OpaqueRef'] = oldRecord['OpaqueRef']
                     vmNode.data(newRecord)
+                    # update flag
+                    changed = True
+
 
         if changed:
             self.poolTreeModel.reset()
             self.ui.treeView.expandAll()
 
     def acquireData(self):
-        ip = []
-        for OpaqueRef, hostNode in self.poolDataIndex['hostIndex']:
-            if OpaqueRef != 'OpaqueRef:NULL':
-                ip.append(hostNode.ip())
-        self.liveDataGraph.refresh(ip)
+        # TODO replace the tuple with dynamic data
+        self.liveDataGraph.refresh(['192.168.1.251', '192.168.1.252'])
 
     def updateStatistic(self):
 
@@ -341,16 +317,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # get parameters
         paramK = self.ui.doubleSpinBoxK.value()
-        paramM = self.ui.doubleSpinBoxM.value()
         paramT = 5   # T
-
-        # define formula
-        formula = lambda t, ec, em, k, m, g: t * (ec + k * em + (m * g * k + m) / (1 - m))
+        formula = lambda t, c, m, k: t * (c + k * m)
 
         now = int(time.time()) - 60
 
         parser = RRDUpdates()
-        for ip in [x.ip() for x in self.poolDataIndex['hostIndex'].values() if x.type() == 'HOST' and x.isEnable()]:
+        for ip in [x.ip() for x in self.poolDataIndex['hostIndex'].values() if x.type() == 'HOST' and x.enable()]:
 
             try:
                 # query the data from host
@@ -362,10 +335,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if parser.get_nrows() == 0:
                 break
             # only parse the first data
-            paramG = parser.get_host_data('memory_total_kib', 0) / 1024 / 1024  # KB->GB
-            paramEM = (parser.get_host_data('memory_total_kib', 0) - parser.get_host_data('memory_free_kib', 0)) / 1024 / 1024  # KB->GB
-            paramEC = parser.get_host_data('cpu_avg', 0) * 100  # numeric->%
-            data = data + formula(paramT, paramEC, paramEM, paramK, paramM, paramG)
+            paramM = (parser.get_host_data('memory_total_kib', 0) - parser.get_host_data('memory_free_kib', 0)) / 1024 / 1024  # KB->GB
+            paramC = parser.get_host_data('cpu_avg', 0) * 100
+            data = data + formula(paramT, paramC, paramM, paramK)
 
         self.totalEnergy = self.totalEnergy + data
 
@@ -392,7 +364,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if nodeType == 'HOST':
             # host node, show the host context menu
             # not support yet
-            self.ui.menuHost.exec_(QCursor.pos())
+            #self.ui.menuHost.exec_(QCursor.pos())
+            pass
         elif nodeType == 'VM':
             # vm node, show the vm context menu
             state = node.state()
@@ -522,10 +495,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def updateLog(self, log):
         self.ui.plainTextLog.appendPlainText('{0}\n{1}'.format(time.strftime('%H:%M:%S', time.localtime(time.time())), self.tr(log)))
-
-    def clearStatistic(self):
-        self.statisticDataGraph.clear()
-        self.totalEnergy = 0
 
     '''
     ui stuff end
